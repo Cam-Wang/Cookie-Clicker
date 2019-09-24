@@ -38,17 +38,22 @@ class MainActivity : AppCompatActivity() {
      */
     fun getStore() = getPreferences(Context.MODE_PRIVATE)
     override fun onCreate(savedInstanceState: Bundle?) {
+        var user = intent.extras?.getString("username","default")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         if(savedInstanceState != null){
-            counter = savedInstanceState.getLong(CounterKey)
+            counter = savedInstanceState.getLong(user,0)
             Counter.text = "" + counter
             if(counter >= 10){
                 titleText.text = "You are hydrated!"
                 puddleText.visibility = View.VISIBLE
                 puddleImage.visibility = View.VISIBLE
             }
+        }
+        else    {
+            counter = getStore().getLong(user,0)
+            Counter.text = ""+counter
         }
         waterDrop.setOnClickListener{
             counter++
@@ -89,16 +94,19 @@ class MainActivity : AppCompatActivity() {
     }
     override  fun onPause()
     {
+        var user = intent.extras?.getString("username","default")
         super.onPause()
-        getStore().edit().putLong(CounterKey,counter).commit()
+        getStore().edit().putLong(user,counter).apply()
     }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState?.run {
-            putLong(CounterKey,counter)
+            var user = intent.extras?.getString("username","default")
+            putLong(user,counter)
         }
     }
     companion object {
         private const val CounterKey = "counterKey"
     }
+
 }
