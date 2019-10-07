@@ -16,8 +16,8 @@
 
         />
     <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="20dp"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
         android:id="@+id/imageButton"
         />
 

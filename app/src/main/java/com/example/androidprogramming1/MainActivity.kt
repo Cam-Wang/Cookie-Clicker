@@ -21,9 +21,9 @@ import android.os.Handler
 
 
 class MainActivity : AppCompatActivity() {
-    private var counter: Long = 0;
-    private var numPuddles = 0;
-    private var numRivers = 0;
+    private var counter: Long = 0
+    private var numPuddles = 0
+    private var numRivers = 0
     /*
     private val handler = Handler()
     private val runnable = object : Runnable {
@@ -36,9 +36,9 @@ class MainActivity : AppCompatActivity() {
     }
 
      */
-    fun getStore() = getPreferences(Context.MODE_PRIVATE)
+    private fun getStore() = getPreferences(Context.MODE_PRIVATE)
     override fun onCreate(savedInstanceState: Bundle?) {
-        var user = intent.extras?.getString("username","default")
+        val user = intent.extras?.getString("username","default")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -46,18 +46,33 @@ class MainActivity : AppCompatActivity() {
             counter = savedInstanceState.getLong(user,0)
             Counter.text = "" + counter
             if(counter >= 10){
-                titleText.text = "You are hydrated!"
+                titleText.text = "Buy puddles to increase hydration"
                 puddleText.visibility = View.VISIBLE
                 puddleImage.visibility = View.VISIBLE
             }
+            if(counter >= 50){
+                riverImage.visibility = View.VISIBLE
+                riverText.visibility = View.VISIBLE
+            }
         }
-        else    {
-            counter = getStore().getLong(user,0)
-            Counter.text = ""+counter
+        else {
+            counter = getStore().getLong(user, 0)
+            Counter.text = "" + counter
+
+            if (counter >= 10) {
+                titleText.text = "Buy puddles to increase hydration"
+                puddleText.visibility = View.VISIBLE
+                puddleImage.visibility = View.VISIBLE
+            }
+            if (counter >= 50) {
+                riverImage.visibility = View.VISIBLE
+                riverText.visibility = View.VISIBLE
+            }
         }
         waterDrop.setOnClickListener{
             counter++
             Counter.text = ""+counter
+            hydrationText.visibility= View.INVISIBLE
             if(counter >= 10){
                 titleText.text = "Buy puddles to increase hydration"
                 puddleText.visibility = View.VISIBLE
@@ -77,6 +92,7 @@ class MainActivity : AppCompatActivity() {
                 Counter.text = ""+counter
                 numRivers++
                 riverText.text = ""+numRivers
+                hydrationText.visibility= View.VISIBLE
             }
         }
 
@@ -94,19 +110,16 @@ class MainActivity : AppCompatActivity() {
     }
     override  fun onPause()
     {
-        var user = intent.extras?.getString("username","default")
+        val user = intent.extras?.getString("username","default")
         super.onPause()
         getStore().edit().putLong(user,counter).apply()
     }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState?.run {
-            var user = intent.extras?.getString("username","default")
+            val user = intent.extras?.getString("username","default")
             putLong(user,counter)
         }
-    }
-    companion object {
-        private const val CounterKey = "counterKey"
     }
 
 }
