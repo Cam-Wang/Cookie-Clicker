@@ -24,9 +24,9 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
-    private var counter: Long = 0
-    private var numPuddles = 0
-    private var numRivers = 0
+    private var counter: Long = 0 //create the counter variable to store user score
+    private var numPuddles = 0 //stores number of puddles owned by user (currently not saved)
+    private var numRivers = 0//stores number of rivers owned by user (currently not saved)
     /*
     private val handler = Handler()
     private val runnable = object : Runnable {
@@ -39,41 +39,41 @@ class MainActivity : AppCompatActivity() {
     }
 
      */
-    private  fun updateCounter(count:Long){
-        counter = count
-        Counter.text = ""+counter
-        if(count >= 10)
+    private  fun updateCounter(count:Long){ //updateCounter function used with livedata
+        counter = count //setting score from livedata
+        Counter.text = ""+counter //update the screen text
+        if(count >= 10) //check to display the puddle image and text
         {
             titleText.text = "Buy puddles to increase hydration"
             puddleText.visibility = View.VISIBLE
             puddleImage.visibility = View.VISIBLE
         }
-        else
+        else //checks to not display the puddle image and text
         {
             titleText.text = "Click to Hydrate"
             puddleText.visibility = View.INVISIBLE
             puddleImage.visibility = View.INVISIBLE
         }
-        if(count >=50)
+        if(count >=50) //check to display the river image and text
         {
             riverImage.visibility = View.VISIBLE
             riverText.visibility = View.VISIBLE
         }
-        else
+        else //check to not display the river image and text
         {
             riverImage.visibility = View.INVISIBLE
             riverText.visibility = View.INVISIBLE
         }
     }
-    private fun getUsername() = intent.extras?.get("username").toString().toLowerCase(Locale.US)
-    private fun getStore() = getPreferences(Context.MODE_PRIVATE)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        val countViewModel = ViewModelProviders.of(this)[UserViewModel::class.java]
-        countViewModel.getUserCount(getUsername()).observe(
+    private fun getUsername() = intent.extras?.get("username").toString().toLowerCase(Locale.US) //getting username from login page
+    //private fun getStore() = getPreferences(Context.MODE_PRIVATE) //getting store unused
+    override fun onCreate(savedInstanceState: Bundle?) { //override the activities oncreate function called at the beginning
+        val countViewModel = ViewModelProviders.of(this)[UserViewModel::class.java] //getting a viewmodel using the default constructor
+        countViewModel.getUserCount(getUsername()).observe( //setting to observe the counter and setting to use it with the updateCounter function
             this,
             androidx.lifecycle.Observer { updateCounter(it)  })
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main) //setting the view for the activity to R.layout
     /*
         if(savedInstanceState != null){
             counter = savedInstanceState.getLong(user,0)
@@ -104,42 +104,50 @@ class MainActivity : AppCompatActivity() {
         }
         */
 
+        //setting the waterdrop image to be a button
         waterDrop.setOnClickListener{
-            counter++
-            countViewModel.setUserCount(getUsername(),counter)
-            Counter.text = ""+counter
-            hydrationText.visibility= View.INVISIBLE
+            counter++ //increments counter
+            countViewModel.setUserCount(getUsername(),counter) //updates the livedata with the incremented counter
+            Counter.text = ""+counter //update text
+            hydrationText.visibility= View.INVISIBLE //changes the hydration text
 
         }
+        //set the puddle image to a button
         puddleImage.setOnClickListener{
-            if(counter >= 10)
+            if(counter >= 10) //checks that the currency is more than the purchase price
             {
-                counter -=10
-                Counter.text = ""+counter
-                numPuddles++
-                puddleText.text = ""+numPuddles
-                hydrationText.visibility= View.VISIBLE
-                if(counter <= 10)
+                counter -=10 //substracts the price from the score
+                Counter.text = ""+counter //updates score
+                numPuddles++ //increments the number of puddles
+                puddleText.text = ""+numPuddles //updates the text for the puddles
+                hydrationText.visibility= View.VISIBLE //shows the title text with updated text
+
+                if(counter <= 10) //checks if the counter post interaction is less than 10
                 {
-                    titleText.text = "Click to Hydrate"
-                    puddleText.visibility = View.INVISIBLE
-                    puddleImage.visibility = View.INVISIBLE
+                    titleText.text = "Click to Hydrate" //updates the title text
+                    puddleText.visibility = View.INVISIBLE //disables puddle text
+                    puddleImage.visibility = View.INVISIBLE //disables puddle image
                 }
+
+
             }
         }
-
+        //sets river image to be a button
         riverImage.setOnClickListener {
-            if(counter>= 50)
+            if(counter>= 50) //checks if user has enough to buy a river
             {
-                counter -=50
-                Counter.text = ""+counter
-                numRivers++
-                riverText.text = ""+numRivers
-                if(counter <= 50)
+                counter -=50 //substacts cost of a river
+                Counter.text = ""+counter //updates counter text
+                numRivers++ //increments river
+                riverText.text = ""+numRivers //updates numrivers text
+
+                if(counter <= 50) //checks if after purchase if the river hsould still be there
                 {
-                    riverImage.visibility = View.INVISIBLE
-                    riverText.visibility = View.INVISIBLE
+                    riverImage.visibility = View.INVISIBLE //hides river image
+                    riverText.visibility = View.INVISIBLE //hides river text
                 }
+
+
             }
         }
 

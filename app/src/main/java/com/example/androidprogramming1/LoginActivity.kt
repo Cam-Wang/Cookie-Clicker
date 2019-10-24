@@ -9,11 +9,11 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 
 class LoginActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+    override fun onCreate(savedInstanceState: Bundle?) { //overrides oncreate function for when the activity starts
+        super.onCreate(savedInstanceState) //calling super oncreate
+        setContentView(R.layout.activity_login) //sets view
 
-        loginUsernameField.addTextChangedListener(object: TextWatcher{
+        loginUsernameField.addTextChangedListener(object: TextWatcher{ //sets the input field to update with typed text
             override fun beforeTextChanged(p0: CharSequence?,p1:Int,p2: Int, p3: Int){
 
             }
@@ -28,5 +28,6 @@ class LoginActivity : AppCompatActivity() {
         })
 
         imageButton.setOnClickListener{startActivity(Intent(this,MainActivity::class.java).apply {putExtra("username",loginUsernameField.text.toString())})}
+        //when the login button is clicked passes in the entered username to the main activity
     }
 }
