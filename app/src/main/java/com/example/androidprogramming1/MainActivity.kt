@@ -19,6 +19,7 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.Handler
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.bumptech.glide.Glide
 import com.example.androidprogramming1.ViewModels.UserViewModel
 import java.util.*
 
@@ -73,6 +74,13 @@ class MainActivity : AppCompatActivity() {
             this,
             androidx.lifecycle.Observer { updateCounter(it)  })
         super.onCreate(savedInstanceState)
+        val gif = countViewModel.getGif().observe(
+            this,
+            androidx.lifecycle.Observer {
+                Glide.with(this)
+                .load(it.url)
+                .into(myImage)  })
+
         setContentView(R.layout.activity_main) //setting the view for the activity to R.layout
     /*
         if(savedInstanceState != null){
@@ -134,7 +142,7 @@ class MainActivity : AppCompatActivity() {
         }
         //sets river image to be a button
         riverImage.setOnClickListener {
-            if(counter>= 50) //checks if user has enough to buy a river
+            /*if(counter>= 50) //checks if user has enough to buy a river
             {
                 counter -=50 //substacts cost of a river
                 Counter.text = ""+counter //updates counter text
@@ -146,9 +154,7 @@ class MainActivity : AppCompatActivity() {
                     riverImage.visibility = View.INVISIBLE //hides river image
                     riverText.visibility = View.INVISIBLE //hides river text
                 }
-
-
-            }
+            */
         }
 
 
