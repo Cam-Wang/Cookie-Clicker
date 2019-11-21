@@ -1,6 +1,10 @@
 package com.example.androidprogramming1
 
+import MyAlarmReceiver
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.content.SharedPreferences
@@ -40,6 +44,9 @@ class MainActivity : AppCompatActivity() {
     }
 
      */
+    private val REQUEST_CODE = 0
+    private lateinit var alarmManager: AlarmManager
+    private lateinit var pendingIntent: PendingIntent
     private  fun updateCounter(count:Long){ //updateCounter function used with livedata
         counter = count //setting score from livedata
         Counter.text = ""+counter //update the screen text
@@ -111,8 +118,27 @@ class MainActivity : AppCompatActivity() {
             }
         }
         */
-
         //setting the waterdrop image to be a button
+        // Creating the pending intent to send to the BroadcastReceiver
+        alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, MyAlarmReceiver::class.java)
+        pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, intent, 0)
+
+        // Setting the specific time for the alarm manager to trigger the intent
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = System.currentTimeMillis()
+        calendar.set(Calendar.HOUR_OF_DAY, 20)
+        calendar.set(Calendar.MINUTE, 8)
+
+        // Starts the alarm manager
+        alarmManager.setRepeating(
+            AlarmManager.RTC,
+            calendar.timeInMillis,
+                1000 * 60 * 1,
+            pendingIntent
+        )
+
+
         waterDrop.setOnClickListener{
             counter++ //increments counter
             countViewModel.setUserCount(getUsername(),counter) //updates the livedata with the incremented counter

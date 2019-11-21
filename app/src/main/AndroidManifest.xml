@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/waterdrop"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver android:name="MyAlarmReceiver"></receiver>
         <activity android:name=".MainActivity"></activity>
 
         <activity android:name=".LoginActivity">
