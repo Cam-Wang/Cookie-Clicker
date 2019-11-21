@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
     }
 
      */
+    //variables for alarm manager
     private val REQUEST_CODE = 0
     private lateinit var alarmManager: AlarmManager
     private lateinit var pendingIntent: PendingIntent
@@ -118,7 +119,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         */
-        //setting the waterdrop image to be a button
         // Creating the pending intent to send to the BroadcastReceiver
         alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, MyAlarmReceiver::class.java)
@@ -137,8 +137,7 @@ class MainActivity : AppCompatActivity() {
                 1000 * 60 * 1,
             pendingIntent
         )
-
-
+        //setting the waterdrop image to be a button
         waterDrop.setOnClickListener{
             counter++ //increments counter
             countViewModel.setUserCount(getUsername(),counter) //updates the livedata with the incremented counter
